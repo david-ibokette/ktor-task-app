@@ -6,6 +6,8 @@ import io.ktor.server.http.content.staticResources
 import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import net.ibokette.model.tasks
+import net.ibokette.model.tasksAsTable
 
 fun Application.configureRouting() {
     routing {
@@ -20,16 +22,9 @@ fun Application.configureRouting() {
         get("/tasks") {
             call.respondText(
                 contentType = ContentType.parse("text/html"),
-                text = """
-                <h3>TODO:</h3>
-                <ol>
-                    <li>A table of all the tasks</li>
-                    <li>A form to submit new tasks</li>
-                </ol>
-                """.trimIndent()
+                text = tasks.tasksAsTable()
             )
         }
-
 
         get("/") {
             call.respondText("Hello World!")
