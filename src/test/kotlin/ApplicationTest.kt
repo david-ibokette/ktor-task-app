@@ -45,4 +45,18 @@ class ApplicationTest {
         assertEquals(HttpStatusCode.OK, response.status)
         assertContains(response.bodyAsText(), "This is a test exception")
     }
+
+    @Test
+    fun `test mycontent`() = testApplication {
+        application {
+            module()
+        }
+
+        val response = client.get("/content/sample.html")
+
+        assertEquals(HttpStatusCode.OK, response.status)
+        assertEquals("html", response.contentType()?.contentSubtype)
+        assertContains(response.bodyAsText(), "My sample")
+    }
+
 }

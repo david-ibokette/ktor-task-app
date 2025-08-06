@@ -5,3 +5,13 @@ GET http://localhost:9292/
 GET http://localhost:9292/apokolips
 
 ###
+GET http://localhost:9292/tasks
+
+###
+GET http://localhost:9292/tasks/byPriority/Medium
+
+### 404
+GET http://localhost:9292/tasks/byPriority/Vital
+
+### 400
+GET http://localhost:9292/tasks/byPriority/Impossible

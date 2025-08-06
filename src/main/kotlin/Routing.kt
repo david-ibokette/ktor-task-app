@@ -1,12 +1,14 @@
 package net.ibokette
 
 import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.*
 import io.ktor.server.http.content.staticResources
 import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import net.ibokette.model.tasks
+import net.ibokette.model.Priority
+import net.ibokette.model.TaskRepository
 import net.ibokette.model.tasksAsTable
 
 fun Application.configureRouting() {
@@ -18,12 +20,39 @@ fun Application.configureRouting() {
         }
 
         staticResources("/content", "mycontent")
+        staticResources("/task-ui", "task-ui")
 
         get("/tasks") {
             call.respondText(
                 contentType = ContentType.parse("text/html"),
-                text = tasks.tasksAsTable()
+                text = TaskRepository.allTasks().tasksAsTable()
             )
+        }
+
+        //add the following route
+        get("/tasks/byPriority/{priority?}") {
+            val priorityAsText = call.parameters["priority"]
+            if (priorityAsText == null) {
+                call.respond(HttpStatusCode.BadRequest)
+                return@get
+            }
+
+            try {
+                val priority = Priority.valueOf(priorityAsText)
+                val tasks = TaskRepository.tasksByPriority(priority)
+
+                if (tasks.isEmpty()) {
+                    call.respond(HttpStatusCode.NotFound)
+                    return@get
+                }
+
+                call.respondText(
+                    contentType = ContentType.parse("text/html"),
+                    text = tasks.tasksAsTable()
+                )
+            } catch(ex: IllegalArgumentException) {
+                call.respond(HttpStatusCode.BadRequest)
+            }
         }
 
         get("/") {
