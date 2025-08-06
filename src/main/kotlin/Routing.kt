@@ -5,9 +5,11 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.*
 import io.ktor.server.http.content.staticResources
 import io.ktor.server.plugins.statuspages.StatusPages
+import io.ktor.server.request.receiveParameters
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import net.ibokette.model.Priority
+import net.ibokette.model.Task
 import net.ibokette.model.TaskRepository
 import net.ibokette.model.tasksAsTable
 
@@ -54,6 +56,42 @@ fun Application.configureRouting() {
                 call.respond(HttpStatusCode.BadRequest)
             }
         }
+
+        post("/tasks") {
+            val formContent = call.receiveParameters()
+
+            val params = Triple(
+                formContent["name"] ?: "",
+                formContent["description"] ?: "",
+                formContent["priority"] ?: ""
+            )
+
+            if (params.toList().any { it.isEmpty() }) {
+                call.respond(HttpStatusCode.BadRequest)
+                return@post
+            }
+
+            try {
+                val priority = Priority.valueOf(params.third)
+                TaskRepository.addTask(
+                    Task(
+                        params.first,
+                        params.second,
+                        priority
+                    )
+                )
+
+                call.respond(HttpStatusCode.NoContent)
+            } catch (ex: IllegalArgumentException) {
+                call.respond(HttpStatusCode.BadRequest)
+            } catch (ex: IllegalStateException) {
+                call.respond(HttpStatusCode.BadRequest)
+            }
+        }
+
+        /////////////////////////////////////////////
+        // From the previous tutorial
+        /////////////////////////////////////////////
 
         get("/") {
             call.respondText("Hello World!")
