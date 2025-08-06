@@ -1,0 +1,7 @@
+### GET request to example server
+GET http://localhost:9292/
+
+### GET request to example server to the new gods
+GET http://localhost:9292/apokolips
+
+###

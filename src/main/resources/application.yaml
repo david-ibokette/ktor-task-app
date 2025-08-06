@@ -1,0 +1,6 @@
+ktor:
+    application:
+        modules:
+            - net.ibokette.ApplicationKt.module
+    deployment:
+        port: 9292
