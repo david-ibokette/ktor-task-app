@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.ktor)
@@ -21,5 +23,13 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages:3.2.3")
     implementation("io.ktor:ktor-server-core:3.2.3")
     testImplementation(libs.ktor.server.test.host)
-    testImplementation(libs.kotlin.test.junit)
+
+    // Use kotlin.test with JUnit 5 (Jupiter)
+    testImplementation(kotlin("test-junit5"))
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")
+}
+
+// Run tests on the JUnit Platform
+tasks.test {
+    useJUnitPlatform()
 }
