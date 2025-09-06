@@ -28,7 +28,7 @@ fun Application.configureRouting() {
             get {
                 call.respondText(
                     contentType = ContentType.parse("text/html"),
-                    text = TaskRepository.allTasks().tasksAsTable()
+                    text = TaskRepository.allTasksFromDB().tasksAsTable()
                 )
             }
 

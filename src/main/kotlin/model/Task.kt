@@ -6,12 +6,13 @@ enum class Priority {
 data class Task(
     val name: String,
     val description: String,
-    val priority: Priority
+    val priority: Priority,
+    val isCompleted: Boolean = false,
 )
 
 fun Task.taskAsRow() = """
     <tr>
-        <td>$name</td><td>$description</td><td>$priority</td>
+        <td>$name</td><td>$description</td><td>$priority</td><td>Completed: $isCompleted</td>
     </tr>
     """.trimIndent()
 

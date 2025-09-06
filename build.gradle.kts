@@ -22,6 +22,10 @@ dependencies {
     implementation("io.ktor:ktor-server-host-common:3.2.3")
     implementation("io.ktor:ktor-server-status-pages:3.2.3")
     implementation("io.ktor:ktor-server-core:3.2.3")
+    implementation("org.jetbrains.exposed:exposed-core:1.0.0-beta-5")
+    implementation("org.jetbrains.exposed:exposed-dao:1.0.0-beta-5")
+    implementation("org.jetbrains.exposed:exposed-jdbc:1.0.0-beta-5")
+    implementation("org.postgresql:postgresql:42.7.3")
     testImplementation(libs.ktor.server.test.host)
 
     // Use kotlin.test with JUnit 5 (Jupiter)
