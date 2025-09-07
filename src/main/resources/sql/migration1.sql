@@ -10,5 +10,16 @@ create table task
     priority    priority,
     completed   boolean
 );
+
 insert into public.task (name, description, priority, completed)
 values ('watch nfl', 'Order Redzone At 12:45pm', 'High', false);
+
+insert into public.task (name, description, priority, completed)
+values ('workout', 'bike and walk neighborhood', 'Medium', false);
+
+insert into public.task (name, description, priority, completed)
+values ('read', 'Schools Betrayed', 'Low', false);
+
+insert into public.task (name, description, priority, completed)
+values ('gizzards', 'get gizzards out of freezer', 'High', false);
+

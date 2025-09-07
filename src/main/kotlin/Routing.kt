@@ -42,7 +42,7 @@ fun Application.configureRouting() {
 
                 try {
                     val priority = Priority.valueOf(priorityAsText)
-                    val tasks = TaskRepository.tasksByPriority(priority)
+                    val tasks = TaskRepository.tasksByPriorityFromDB(priority)
 
                     if (tasks.isEmpty()) {
                         call.respond(HttpStatusCode.NotFound)

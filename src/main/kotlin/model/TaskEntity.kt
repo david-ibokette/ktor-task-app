@@ -13,12 +13,11 @@ object TaskEntity : Table("task") {
     val id = integer("id").autoIncrement()
     val name = varchar("name", MAX_VARCHAR_LENGTH)
     val description = varchar("description", MAX_VARCHAR_LENGTH)
-//    val priority = enumeration<Priority>("priority")
     val priority: Column<Priority> = customEnumeration(
         name = "priority", // Name of the column in the database
         fromDb = { value -> Priority.valueOf(value as String) }, // Converts database value to enum
-        toDb = { it.name } // Converts enum to database value (its name)
-    )
+    toDb = { value -> PGEnum("priority", value) } // send PG enum, not varchar
+)
 
     val isCompleted = bool("completed").default(false)
 }

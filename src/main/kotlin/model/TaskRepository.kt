@@ -1,7 +1,8 @@
 package net.ibokette.model
 
-import org.jetbrains.exposed.v1.core.count
+import org.jetbrains.exposed.v1.core.StdOutSqlLogger
 import org.jetbrains.exposed.v1.jdbc.select
+import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 
 object TaskRepository {
@@ -33,6 +34,23 @@ object TaskRepository {
     fun tasksByPriority(priority: Priority) = tasks.filter {
         it.priority == priority
     }
+
+    fun tasksByPriorityFromDB(priority: Priority): List<Task> {
+        return transaction {
+            addLogger(StdOutSqlLogger)
+
+            return@transaction TaskEntity.selectAll().where { TaskEntity.priority eq priority }
+                .map {
+                    return@map Task(
+                        it[TaskEntity.name],
+                        it[TaskEntity.description],
+                        it[TaskEntity.priority],
+                        it[TaskEntity.isCompleted]
+                    )
+                }
+        }
+    }
+
 
     fun taskByName(name: String) = tasks.find {
         it.name.equals(name, ignoreCase = true)
