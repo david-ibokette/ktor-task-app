@@ -1,6 +1,7 @@
 package net.ibokette.model
 
 import org.jetbrains.exposed.v1.core.StdOutSqlLogger
+import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.select
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
@@ -56,10 +57,45 @@ object TaskRepository {
         it.name.equals(name, ignoreCase = true)
     }
 
+    fun taskByNameFromDB(name: String) = tasks.find {
+        return transaction {
+            addLogger(StdOutSqlLogger)
+
+            return@transaction TaskEntity.selectAll().where { TaskEntity.name eq name }
+                .map {
+                    return@map Task(
+                        it[TaskEntity.name],
+                        it[TaskEntity.description],
+                        it[TaskEntity.priority],
+                        it[TaskEntity.isCompleted]
+                    )
+                }
+            .firstOrNull()
+        }
+    }
+
     fun addTask(task: Task) {
         if(taskByName(task.name) != null) {
             throw IllegalStateException("Cannot duplicate task names!")
         }
         tasks.add(task)
+    }
+
+    fun addTaskToDB(task: Task) {
+        if(taskByNameFromDB(task.name) != null) {
+            throw IllegalStateException("Cannot duplicate task names!")
+        }
+
+        transaction {
+            val taskId = TaskEntity.insert {
+                it[name] = task.name
+                it[description] = task.description
+                it[priority] = task.priority
+                it[isCompleted] = task.isCompleted
+            } get TaskEntity.id
+
+            println("Created new task with ids $taskId.")
+        }
+
     }
 }

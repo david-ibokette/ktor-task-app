@@ -74,7 +74,7 @@ fun Application.configureRouting() {
 
                 try {
                     val priority = Priority.valueOf(params.third)
-                    TaskRepository.addTask(
+                    TaskRepository.addTaskToDB(
                         Task(
                             params.first,
                             params.second,
