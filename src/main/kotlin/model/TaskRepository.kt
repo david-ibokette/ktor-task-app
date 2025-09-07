@@ -23,10 +23,8 @@ object TaskRepository {
                     return@map Task(
                         it[TaskEntity.name],
                         it[TaskEntity.description],
-//                        Priority.valueOf(it[TaskEntity.priority].name),
-                        // TODO - need to make customEnum: https://docs.google.com/document/d/1WMIvBjw1ZoFswUUbQOUa5sUiKip4_teLy4FAmYI28Xs/edit?usp=sharing
-                        Priority.Medium,
-                                it[TaskEntity.isCompleted]
+                        it[TaskEntity.priority],
+                        it[TaskEntity.isCompleted]
                     )
                 }
         }
