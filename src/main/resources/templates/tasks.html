@@ -1,0 +1,19 @@
+<!DOCTYPE html >
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<h1>Tasks</h1>
+<ul th:each="task : ${taskList}">
+<!--    <a th:href="@{'report-card/'+${student.id}}" th:text="${student.fullName}" />-->
+    <li th:text="${task.name}" />
+    <li th:text="${task.description}" />
+    <li th:text="${task.priority}" />
+    <li>
+    <label for="isCompleted">Completed?</label>
+    <input type="checkbox" id="isCompleted" th:checked="*{task.isCompleted}" /><br/>
+    </li>
+</ul>
+</body>
+</html>

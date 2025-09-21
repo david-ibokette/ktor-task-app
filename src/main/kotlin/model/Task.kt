@@ -22,3 +22,5 @@ fun List<Task>.tasksAsTable() = this.joinToString(
     separator = "\n",
     transform = Task::taskAsRow
 )
+
+fun List<Task>.tasksAsMap() = this.associateBy { it.name }

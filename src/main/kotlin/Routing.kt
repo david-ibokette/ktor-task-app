@@ -8,9 +8,11 @@ import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.request.receiveParameters
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.server.thymeleaf.ThymeleafContent
 import net.ibokette.model.Priority
 import net.ibokette.model.Task
 import net.ibokette.model.TaskRepository
+import net.ibokette.model.tasksAsMap
 import net.ibokette.model.tasksAsTable
 
 fun Application.configureRouting() {
@@ -24,6 +26,16 @@ fun Application.configureRouting() {
         staticResources("/content", "mycontent")
         staticResources("/task-ui", "task-ui")
 
+        route("/th-tasks") {
+            get {
+//                val all = TaskRepository.allTasksFromDB().tasksAsMap()
+//                val t = Task("a", "asaa", Priority.High, false)
+//                val mymap: Map<String, List<Task>> = mapOf("taskList", listOf(t))
+
+                call.respond(ThymeleafContent("tasks",mapOf("taskList" to TaskRepository.allTasksFromDB())))
+//                call.respond(ThymeleafContent("task",mapOf("taskList", listOf(t))))
+            }
+        }
         route("/tasks") {
             get {
                 call.respondText(
@@ -106,5 +118,10 @@ fun Application.configureRouting() {
         get("/error-test") {
             throw IllegalStateException("This is a test exception")
         }
+        get("/thanos") {
+            println("Thanos has been activated!")
+            call.respond(ThymeleafContent("index", mapOf("message" to "Hello World")))
+        }
+
     }
 }
