@@ -8,6 +8,7 @@ data class Task(
     val description: String,
     val priority: Priority,
     val isCompleted: Boolean = false,
+    val id: Int? = null,
 )
 
 fun Task.taskAsRow() = """

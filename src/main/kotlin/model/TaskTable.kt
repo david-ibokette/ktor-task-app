@@ -1,15 +1,11 @@
 package net.ibokette.model
 
-import net.ibokette.model.TaskEntity.description
-import net.ibokette.model.TaskEntity.isCompleted
-import net.ibokette.model.TaskEntity.name
-import net.ibokette.model.TaskEntity.priority
 import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.Table
 
 const val MAX_VARCHAR_LENGTH = 128
 
-object TaskEntity : Table("task") {
+object TaskTable : Table("task") {
     val id = integer("id").autoIncrement()
     val name = varchar("name", MAX_VARCHAR_LENGTH)
     val description = varchar("description", MAX_VARCHAR_LENGTH)
@@ -22,15 +18,15 @@ object TaskEntity : Table("task") {
     val isCompleted = bool("completed").default(false)
 }
 
-fun TaskEntity.taskAsRow() = """
+fun TaskTable.taskAsRow() = """
     <tr>
         <td>$name</td><td>$description</td><td>$priority</td><td>Completed: $isCompleted</td>
     </tr>
     """.trimIndent()
 
-fun taskEntityAsRow(taskEntity: TaskEntity) = taskEntity.taskAsRow()
+fun taskEntityAsRow(taskEntity: TaskTable) = taskEntity.taskAsRow()
 
-fun List<TaskEntity>.tasksAsTable() = this.joinToString(
+fun List<TaskTable>.tasksAsTable() = this.joinToString(
     prefix = "<table rules=\"all\">",
     postfix = "</table>",
     separator = "\n",

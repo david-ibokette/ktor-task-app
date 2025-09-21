@@ -18,15 +18,16 @@ object TaskRepository {
 
     fun allTasksFromDB(): List<Task> {
         return transaction {
-            return@transaction TaskEntity.select(TaskEntity.id, TaskEntity.isCompleted, TaskEntity.name,
-                TaskEntity.description, TaskEntity.priority)
+            return@transaction TaskTable.select(TaskTable.id, TaskTable.isCompleted, TaskTable.name,
+                TaskTable.description, TaskTable.priority)
 //                .groupBy(TaskEntity.isCompleted)
                 .map {
                     return@map Task(
-                        it[TaskEntity.name],
-                        it[TaskEntity.description],
-                        it[TaskEntity.priority],
-                        it[TaskEntity.isCompleted]
+                        it[TaskTable.name],
+                        it[TaskTable.description],
+                        it[TaskTable.priority],
+                        it[TaskTable.isCompleted],
+                        it[TaskTable.id],
                     )
                 }
         }
@@ -40,13 +41,13 @@ object TaskRepository {
         return transaction {
             addLogger(StdOutSqlLogger)
 
-            return@transaction TaskEntity.selectAll().where { TaskEntity.priority eq priority }
+            return@transaction TaskTable.selectAll().where { TaskTable.priority eq priority }
                 .map {
                     return@map Task(
-                        it[TaskEntity.name],
-                        it[TaskEntity.description],
-                        it[TaskEntity.priority],
-                        it[TaskEntity.isCompleted]
+                        it[TaskTable.name],
+                        it[TaskTable.description],
+                        it[TaskTable.priority],
+                        it[TaskTable.isCompleted]
                     )
                 }
         }
@@ -61,13 +62,13 @@ object TaskRepository {
         return transaction {
             addLogger(StdOutSqlLogger)
 
-            return@transaction TaskEntity.selectAll().where { TaskEntity.name eq name }
+            return@transaction TaskTable.selectAll().where { TaskTable.name eq name }
                 .map {
                     return@map Task(
-                        it[TaskEntity.name],
-                        it[TaskEntity.description],
-                        it[TaskEntity.priority],
-                        it[TaskEntity.isCompleted]
+                        it[TaskTable.name],
+                        it[TaskTable.description],
+                        it[TaskTable.priority],
+                        it[TaskTable.isCompleted]
                     )
                 }
             .firstOrNull()
@@ -87,12 +88,12 @@ object TaskRepository {
         }
 
         transaction {
-            val taskId = TaskEntity.insert {
+            val taskId = TaskTable.insert {
                 it[name] = task.name
                 it[description] = task.description
                 it[priority] = task.priority
                 it[isCompleted] = task.isCompleted
-            } get TaskEntity.id
+            } get TaskTable.id
 
             println("Created new task with ids $taskId.")
         }
